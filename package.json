@@ -1,0 +1,22 @@
+{
+  "name": "planning-poker",
+  "version": "0.1.0",
+  "description": "Static planning poker.",
+  "main": "src/index.html",
+  "repository": {
+    "type": "mercurial",
+    "url": "https://bitbucket.org/colinbate/transient-poker"
+  },
+  "keywords": [
+    "planning",
+    "poker"
+  ],
+  "author": "Colin Bate <colin@colinbate.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-less": "^0.12.0",
+    "grunt-contrib-watch": "^0.6.1"
+  }
+}

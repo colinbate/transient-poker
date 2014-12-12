@@ -1,0 +1,60 @@
+body {
+	line-height: 1.5;
+	background-color: #fff;
+	color: #111;
+}
+
+* {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+}
+
+body, .pure-g, .pure-g [class*="pure-u"] {
+	font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+a {
+	color: #111;
+	text-decoration: none;
+}
+
+.edit-mode {
+	header a.done {
+		.manage {
+			display: none;
+		}
+		.d {
+			display: inline;
+		}
+	}
+}
+
+@color-divider: #888;
+
+.pure-button {
+	padding: 0.5em 0.25em;
+}
+
+header {
+	background-color: #eaeaea;
+	border-bottom: 1px solid @color-divider;
+	padding: 0.5em 1em;
+	&.game-off {
+		a {
+			display: none;
+		}
+	}
+	a {
+		color: blue;
+		float: right;
+		padding: 0.5em 0;
+		cursor: pointer;
+		span.d {
+			display: none;
+		}
+	}
+	.title {
+		font-weight: bold;
+		padding: 0.5em 0;
+	}
+}
