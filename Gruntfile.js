@@ -6,11 +6,11 @@ module.exports = function(grunt) {
     meta: {
       banner:
         '/*!\n' +
-        ' * Transient Poker <%= pkg.version %> (<%= grunt.template.today("yyyy-mm-dd, HH:MM") %>)\n' +
+        ' * Planning Poker <%= pkg.version %> (<%= grunt.template.today("yyyy-mm-dd, HH:MM") %>)\n' +
         ' * http://bitbucket.org/colinbate/transient-poker\n' +
         ' * MIT licensed\n' +
         ' *\n' +
-        ' * Copyright (C) 2015 Colin Bate, http://colinbate.com\n' +
+        ' * Copyright (C) <%= grunt.template.today("yyyy") %> Colin Bate, http://colinbate.com\n' +
         ' */\n'
     },
     jshint: {
@@ -59,10 +59,16 @@ module.exports = function(grunt) {
     replace: {
       version: {
         src: ['src/index.html'],
-        dest: 'src/index.html',             // destination directory or file
+        dest: 'dist/<%= pkg.version %>/index.html',             // destination directory or file
         replacements: [{
           from: /v\d+\.\d+\.\d+(-[a-z0-9]+)?/,                   // string replacement
           to: 'v<%= pkg.version %>'
+        },{
+          from: 'poker.css',
+          to: 'poker.<%= pkg.version %>.css'
+        },{
+          from: 'main.js',
+          to: 'main.<%= pkg.version %>.js'
         }]
       }
     },
@@ -76,13 +82,58 @@ module.exports = function(grunt) {
         tasks: 'jshint:product'
       }
     },
+    requirejs: {
+      compile: {
+        options: {
+          baseUrl: 'src',
+          optimizeCss: 'none',
+          mainConfigFile: 'src/main.js',
+          optimize: 'none',
+          findNestedDependencies: true,
+          removeCombined: true,
+          paths: {
+            'pubnub': 'empty:',
+            'mithril': 'empty:',
+          },
+          name: 'main',
+          out: 'build/main.js'
+        }
+      }
+    },
+    uglify: {
+      js: {
+        options: {
+          banner: '<%= meta.banner %>',
+          preserveComments: false
+        },
+        files: {
+          'dist/<%= pkg.version %>/main.<%= pkg.version %>.js': ['build/main.js']
+        }
+      },
+    },
+    csso: {
+      options: {
+        banner: '<%= meta.banner %>',
+        report: 'min'
+      },
+      core: {
+        files: {
+          'dist/<%= pkg.version %>/poker.<%= pkg.version %>.css': ['src/poker.css']
+        }
+      }
+    },
+    clean: ['build', 'dist/<%= pkg.version %>']
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  //grunt.loadNpmTasks('grunt-text-replace');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-text-replace');
+  grunt.loadNpmTasks('grunt-contrib-requirejs');
+  grunt.loadNpmTasks('grunt-csso');
 
   grunt.registerTask('default', ['jshint', 'less:dev']);
-
+  grunt.registerTask('pack', ['jshint', 'less:clean', 'clean', 'csso', 'requirejs', 'uglify', 'replace']);
 };
