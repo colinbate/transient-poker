@@ -18,7 +18,8 @@
         return window;
     });
 
-    require(['app'], function (app) {
+    require(['app', 'lib/fastclick'], function (app, fastclick) {
         app.initialize();
+        fastclick.attach(document.body);
     });
 }());
