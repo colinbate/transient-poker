@@ -1,5 +1,7 @@
 syntax: glob
 node_modules
+bower_components
 build
 dist
 src/*.css
+src/lib

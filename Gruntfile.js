@@ -122,7 +122,12 @@ module.exports = function(grunt) {
         }
       }
     },
-    clean: ['build', 'dist/<%= pkg.version %>']
+    clean: ['build', 'dist/<%= pkg.version %>'],
+    bowercopy: {
+      files: {
+        'src/lib/fastclick.js': 'fastclick/lib/fastclick.js'
+      }
+    }
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -133,6 +138,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-text-replace');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-csso');
+  grunt.loadNpmTasks('grunt-bowercopy');
 
   grunt.registerTask('default', ['jshint', 'less:dev']);
   grunt.registerTask('pack', ['jshint', 'less:clean', 'clean', 'csso', 'requirejs', 'uglify', 'replace']);

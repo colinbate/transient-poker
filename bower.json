@@ -1,0 +1,28 @@
+{
+  "name": "transient-poker",
+  "version": "0.0.0",
+  "authors": [
+    "Colin Bate <colin@colinbate.com>"
+  ],
+  "description": "Planning Poker",
+  "main": "src/index.html",
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "planning",
+    "poker"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "fastclick": "~1.0.3"
+  }
+}
