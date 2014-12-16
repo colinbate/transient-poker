@@ -39,7 +39,7 @@ module.exports = function(grunt) {
           module: false
         }
       },
-      product: ['*.js', 'src/*.js', 'src/modules/**/*.js']
+      product: ['*.js', 'src/**/*.js', '!src/lib/**/*.js']
     },
     less: {
       dev: {
@@ -78,7 +78,7 @@ module.exports = function(grunt) {
         tasks: 'less:dev'
       },
       js: {
-        files: ['*.js', 'src/*.js', 'src/modules/**/*.js'],
+        files: ['*.js', 'src/**/*.js', '!src/lib/**/*.js'],
         tasks: 'jshint:product'
       }
     },

@@ -76,12 +76,16 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id'], functi
       var newUser;
       props = props || {};
       if (room.myName()) {
-        room.myid(msg.signin(room.title()));
-        props.id = room.myid();
-        props.name = room.myName();
-        newUser = new user.User(props);
-        room.users.add(newUser);
-        msg.send.join(newUser.toJson());
+        m.startComputation();
+        msg.signin(room.title(), function (uid) {
+          room.myid(uid);
+          props.id = room.myid();
+          props.name = room.myName();
+          newUser = new user.User(props);
+          room.users.add(newUser);
+          msg.send.join(newUser.toJson());
+          m.endComputation();
+        });
       }
     };
 
@@ -131,12 +135,7 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id'], functi
       var me;
       if (room.myid()) {
         me = room.users.get(room.myid());
-        msg.send.hail({
-          id: me.id(),
-          name: me.name(),
-          ready: me.ready(),
-          observer: me.observer()
-        });
+        msg.send.hail(me.toJson());
       }
     };
 
@@ -192,7 +191,7 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id'], functi
 
     w.onbeforeunload = function () {
       if (room.myid()) {
-        msg.send.leave();
+        msg.send.leaveSync();
       }
     };
 

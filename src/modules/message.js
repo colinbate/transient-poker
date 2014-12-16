@@ -1,8 +1,8 @@
-define(['pubnub', 'mod/event'], function (PubNub, ev) {
+define(['api/hydna', 'mod/event'], function (api, ev) {
   'use strict';
-  var sender, myid, pubnub, channel;
+  var sender, myid, channel;
   
-  var publisherFactory = function (name) {
+  var publisherFactory = function (name, sync) {
     return function (payload) {
       if (typeof payload === 'object' && payload !== null) {
         payload.$name = name;
@@ -16,7 +16,7 @@ define(['pubnub', 'mod/event'], function (PubNub, ev) {
           $name: name
         };
       }
-      sender(payload);
+      sender(payload, false, sync);
     };
   };
 
@@ -39,30 +39,30 @@ define(['pubnub', 'mod/event'], function (PubNub, ev) {
     vote: publisherFactory('vote'),
     reset: publisherFactory('reset'),
     leave: publisherFactory('leave'),
+    leaveSync: publisherFactory('leave', true),
     kick: publisherFactory('kick')
+  };
+
+  var incomingHandler = function (msg) {
+    window.console.log('msg', msg);
+    if (msg && msg.$name) {
+      if (msg.$sender && msg.$sender === myid) {
+        msg.$mine = true;
+      }
+      subscribers[msg.$name].notify(msg);
+    }
   };
 
   var message = {
     on: subscribers,
     send: publishers,
-    init: function () {
-      var uid = PubNub.uuid();
-      myid = uid;
-      pubnub = PubNub.init({
-        uuid: uid,
-        subscribe_key: 'sub-c-e95e35d4-7e3a-11e4-9173-02ee2ddab7fe',
-        publish_key: 'pub-c-c71b2ba8-6ed9-407b-bcbe-a2f93856d538'
-      });
-    },
     signout: function () {
-      if (pubnub && channel) {
-        pubnub.unsubscribe({
-          channel: channel
-        });
+      if (channel) {
+        api.unsubscribe(channel);
         channel = void 0;
       }
     },
-    signin: function (room) {
+    signin: function (room, cb) {
       var isReady = false,
           outbox = [],
           flush = function () {
@@ -70,27 +70,16 @@ define(['pubnub', 'mod/event'], function (PubNub, ev) {
               sender(outbox.shift());
             }
           };
-      if (!pubnub) {
-        message.init();
-      }
       channel = room;
-      pubnub.subscribe({
-        channel: room,
-        message: function (msg) {
-          window.console.log('msg', msg);
-          if (msg && msg.$name) {
-            if (msg.$sender && msg.$sender === myid) {
-              msg.$mine = true;
-            }
-            subscribers[msg.$name].notify(msg);
-          }
-        },
-        connect: function () {
-          isReady = true;
-          flush();
+      api.subscribe(room, incomingHandler, function (uid) {
+        myid = uid;
+        if (cb && typeof cb === 'function') {
+          cb.call(null, myid);
         }
+        isReady = true;
+        flush();
       });
-      sender = function send(msg, retry) {
+      sender = function send(msg, retry, sync) {
         if (!isReady && !retry) {
           outbox.push(msg);
           return;
@@ -99,20 +88,15 @@ define(['pubnub', 'mod/event'], function (PubNub, ev) {
         if (myid && !msg.$sender) {
           msg.$sender = myid;
         }
-        pubnub.publish({
-          channel: room,
-          message: msg,
-          callback: function (res) {
-            if (res[0] === 1 || retry) {
-              isReady = true;
-              flush();
-            } else {
-              send(msg, true);
-            }
+        api.publish(room, msg, function (res) {
+          if (res || retry) {
+            isReady = true;
+            flush();
+          } else {
+            send(msg, true);
           }
-        });
+        }, sync);
       };
-      return myid;
     }
   };
 
