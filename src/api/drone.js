@@ -1,10 +1,10 @@
 define(['scaledrone'], function (ScaleDrone) {
   'use strict';
   var CHANNEL_ID = 'l4AaLoPXD24J0tb5',
-      REST_PREFIX = 'https://api2.scaledrone.com/',
-      getRestUrl = function (roomName) {
-        return REST_PREFIX + CHANNEL_ID + '/' + roomName + '/publish';
-      },
+      // REST_PREFIX = 'https://api2.scaledrone.com/',
+      // getRestUrl = function (roomName) {
+      //   return REST_PREFIX + CHANNEL_ID + '/' + roomName + '/publish';
+      // },
       drone,
       subs = {},
       init = function (cb) {
