@@ -61,6 +61,7 @@ define(['hydna', 'mod/short-id', 'mod/compress-hex'], function (hydna, sid, ch) 
         unsubscribe: function (room) {
           if (chans[room]) {
             chans[room].close();
+            delete chans[room];
           }
         }
       };
