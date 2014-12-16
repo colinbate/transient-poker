@@ -30,6 +30,7 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id'], functi
     room.myChoice = m.prop(null);
     room.voted = m.prop(false);
     room.editMode = m.prop(false);
+    room.joinStatus = m.prop('');
 
     room.roomClass = function () {
       return {'class': room.editMode() ? 'edit-mode' : 'run-mode'};
@@ -75,8 +76,10 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id'], functi
     room.join = function (props) {
       var newUser;
       props = props || {};
-      if (room.myName()) {
+      if (room.myName() && !room.joinStatus()) {
         m.startComputation();
+        room.joinStatus('Joining...');
+        m.redraw();
         msg.signin(room.title(), function (uid) {
           room.myid(uid);
           props.id = room.myid();
@@ -84,6 +87,7 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id'], functi
           newUser = new user.User(props);
           room.users.add(newUser);
           msg.send.join(newUser.toJson());
+          room.joinStatus('');
           m.endComputation();
         });
       }
