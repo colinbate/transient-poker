@@ -28,18 +28,20 @@ define(['hydna', 'mod/short-id', 'mod/compress-hex'], function (hydna, sid, ch) 
       },
       api = {
         subscribe: function (room, handler, cb) {
+          var dataHandler = function (ev) {
+            var j = JSON.parse(ev.data);
+            if (j.$c) {
+              j[j.$c] = ch.shrink(j[j.$c]);
+              delete j.$c;
+            }
+            handler.call(null, j);
+          };
           init(room, function (error, chan) {
             if (error) {
               window.console.error(error);
             }
-            chan.onmessage = function (ev) {
-              var j = JSON.parse(ev.data);
-              if (j.$c) {
-                j[j.$c] = ch.shrink(j[j.$c]);
-                delete j.$c;
-              }
-              handler.call(null, j);
-            };
+            chan.onmessage = dataHandler;
+            chan.onsignal = dataHandler;
             if (cb && typeof cb === 'function') {
               cb.call(null, chan.clientId);
             }
