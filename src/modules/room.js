@@ -11,21 +11,35 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id'], functi
         };
       },
       getRoom = function () {
-        var str = w.location.hash;
+        var str = w.location.hash,
+            pos = str.indexOf('/');
         if (str.substring(0, 1) === '#') {
           str = str.substring(1);
         }
+        if (pos !== -1) {
+          str = str.substring(0, pos);
+        }
+        str = str.replace(/[^a-zA-Z0-9_-]/g, '');
         if (!str) {
           str = sid.get(5);
           w.location.hash = str;
         }
         return str;
+      },
+      getHashName = function () {
+        var str = w.location.hash,
+            pos = str.indexOf('/');
+        if (pos !== -1) {
+          str = str.substring(pos + 1);
+          return str;
+        }
+        return '';
       };
   room.init = function () {
+    room.myName = m.prop(getHashName());
     room.title = m.prop(getRoom());
     room.cards = [0, '½', 1, 2, 3, 5, 8, 13, 20, 40, 100, '?'];
     room.users = new user.UserCollection();
-    room.myName = m.prop('');
     room.myid = m.prop(false);
     room.myChoice = m.prop(null);
     room.voted = m.prop(false);
