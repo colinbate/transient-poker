@@ -11,7 +11,7 @@ define(['mithril', 'mod/room'], function (m, room) {
                 m('div.title', ['Planning Poker', m('span.room-name', ' (' + room.title() + ')')]),
               ]),
               m('section.entry', room.entryStyle(), [
-                m('input[placeholder="Enter a name..."]', {onchange: m.withAttr('value', room.myName), value: room.myName()}),
+                m('input[placeholder="Enter a name..."]', {onchange: m.withAttr('value', room.myName), value: room.myName(), config: room.focusMe}),
                 m('div', [
                   m('button.pure-button', {disabled: !!room.joinStatus(), onclick: room.join}, 'Participate'),
                   m('button.pure-button', {disabled: !!room.joinStatus(), onclick: room.join.bind(room, {observer: true})}, 'Observe')
