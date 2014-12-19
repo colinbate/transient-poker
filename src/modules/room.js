@@ -46,6 +46,14 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id'], functi
       return show ? {} : {style: {display: 'none'}};
     };
 
+    room.setName = function (ev) {
+      room.myName(ev.target.value);
+    };
+
+    room.noEntry = function () {
+      return !!room.joinStatus() || !room.myName();
+    };
+
     room.voteStyle = function () {
       var signedin = !!room.myid(),
           show = signedin && !room.voted();
