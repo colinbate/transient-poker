@@ -34,7 +34,7 @@ define(['mithril', 'mod/room'], function (m, room) {
                 ]);
               })),
               m('section.vote.pure-g', room.voteStyle(), room.cards.map(function (val) {
-                return  m('div.pure-u-1-4.btn-wrap', [
+                return  m('div.pure-u-1-4.pure-u-md-1-6.pure-u-lg-1-12.btn-wrap', room.picked(val), [
                           m('button.pure-button', {onclick: room.vote.bind(room, val)}, '' + val)
                         ]);
               })),

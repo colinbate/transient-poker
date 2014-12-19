@@ -1,3 +1,6 @@
+@color-divider: #888;
+@color-button: #02e;
+
 body {
 	line-height: 1.5;
 	background-color: #fff;
@@ -29,10 +32,27 @@ a {
 	}
 }
 
-@color-divider: #888;
-
 .pure-button {
 	padding: 0.5em 0.25em;
+	border: 1px solid @color-button;
+	background-color: #fff;
+	color: @color-button;
+
+	&:focus, &:hover {
+		-webkit-box-shadow: inset 0px 0px 1px 1px rgba(0,34,238,1);
+        -moz-box-shadow: inset 0px 0px 1px 1px rgba(0,34,238,1);
+        box-shadow: inset 0px 0px 1px 1px rgba(0,34,238,1);
+		background: #fff;
+	}
+
+	&:active, .picked & {
+		background-color: @color-button;
+		color: #fff;
+	}
+
+	&:disabled {
+		border: 1px solid #888;
+	}
 }
 
 header {
@@ -45,7 +65,7 @@ header {
 		}
 	}
 	a {
-		color: blue;
+		color: @color-button;
 		float: right;
 		padding: 0.5em 0;
 		cursor: pointer;

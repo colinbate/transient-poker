@@ -127,6 +127,10 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id'], functi
       }
     };
 
+    room.picked = function (val) {
+      return {'class': val === room.myChoice() ? 'picked' : ''};
+    };
+
     room.toggleEdit = function () {
       room.editMode(!room.editMode());
     };
