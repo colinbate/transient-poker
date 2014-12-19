@@ -72,6 +72,12 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id'], functi
       msg.send.reset();
       room.handleReset();
     };
+
+    room.focusMe = function (el, init) {
+      if (!init) {
+        el.focus();
+      }
+    };
     
     room.join = function (props) {
       var newUser;
