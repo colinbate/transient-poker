@@ -25,7 +25,7 @@ section.users {
 			padding-right: 0.5em;
 		}
 
-		.edit-mode & .obs-status {
+		.obs-status {
 			border-radius: 2px;
 			padding: 0.5em;
 			display: inline-block;
@@ -52,7 +52,7 @@ section.users {
 			width: 12.5%;
 		}
 
-		.name .un, .obs-status, .status {
+		.name .un, .status {
 			line-height: normal;
 			padding: 0.5em 0;
 			display: inline-block;
@@ -79,11 +79,10 @@ section.users {
 				background-color: #d11;
 				color: #fff;
 				width: 100%;
-				border: 0;
+				border: 1px solid #d11;
 				&:hover, &:focus, &:active {
 					background-color: #d11;
 					color: #fff;
-					border: 0;
 					-webkit-box-shadow: none;
                     -moz-box-shadow: none;
         			box-shadow: none;
@@ -92,6 +91,88 @@ section.users {
 			.run-mode & {
 				display: none;
 			}
+		}
+
+		@media screen and (min-width: 64em) {
+			border: 4px dotted #ccc;
+			border-radius: 8px;
+			text-align: center;
+
+			&:hover, &.selected {
+				background-color: #ddd;
+				.obs-status, .delete {
+					display: block;
+					.edit-mode & {
+						display: block;
+					}
+				}
+				.status {
+					visibility: hidden;
+				}
+			}
+
+			&.is-ready {
+				border: 4px solid @color-divider;
+			}
+
+			.name, .status, .edit-mode & .status {
+				width: 100%;
+			}
+
+			.name {
+				font-size: 1.25em;
+				input {
+					text-align: center;
+					width: 80%;
+				}
+			}
+
+			.edit-mode & .name {
+				padding-left: 0;
+				width: 100%;
+			}
+
+			.obs-status, .delete {
+				position: absolute;
+				width: 80%;
+				left: 10%;
+			}
+
+			.obs-status {
+				bottom: 4em;
+				.edit-mode & {
+					display: none;
+				}
+			}
+
+			.delete {
+				bottom: 1em;
+
+				.edit-mode & {
+					display: none;
+				}
+			}
+
+			.status {
+				text-align: center;
+				font-size: 3em;
+				.edit-mode & {
+					padding-right: 0;
+				}
+				&:after {
+					content: "\200B";
+				}
+			}
+		}
+	}
+
+	@media screen and (min-width: 64em) {
+		padding: 0.5em;
+
+		.uwrap {
+			width: 20%;
+			display: inline-block;
+			padding: 0.5em;
 		}
 	}
 }

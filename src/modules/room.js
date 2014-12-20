@@ -34,6 +34,10 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id'], functi
           return str;
         }
         return '';
+      },
+      isDesktopUi = function () {
+        var modeind = document.getElementById('modeind');
+        return modeind.offsetWidth === 0;
       };
   room.init = function () {
     room.myName = m.prop(getHashName());
@@ -45,6 +49,7 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id'], functi
     room.voted = m.prop(false);
     room.editMode = m.prop(false);
     room.joinStatus = m.prop('');
+    room.selectedUser = m.prop(null);
 
     room.roomClass = function () {
       return {'class': room.editMode() ? 'edit-mode' : 'run-mode'};
@@ -61,6 +66,11 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id'], functi
     };
 
     room.setName = function (ev) {
+      if (ev.which === 13 && isDesktopUi()) {
+        room.editMode(false);
+        room.updateName();
+        return;
+      }
       room.myName(ev.target.value);
     };
 
@@ -81,7 +91,9 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id'], functi
 
     room.userClass = function (user) {
       var klass = (user.observer() ? 'observer' : 'normal') + ' ' +
-                  (user.id() === room.myid() ? 'is-me' : 'not-me');
+                  (user.id() === room.myid() ? 'is-me' : 'not-me') + ' ' +
+                  (user.ready() ? 'is-ready' : 'not-ready') +
+                  (user.id() === room.selectedUser() ? ' selected' : '');
       return klass;
     };
 
@@ -128,10 +140,8 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id'], functi
     };
 
     room.toggleObs = function (user) {
-      if (room.editMode()) {
-        user.observer(!user.observer());
-        msg.send.status({id: user.id(), observer: user.observer()});
-      }
+      user.observer(!user.observer());
+      msg.send.status({id: user.id(), observer: user.observer()});
     };
 
     room.kick = function (user) {
@@ -165,15 +175,41 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id'], functi
       return {'class': val === room.myChoice() ? 'picked' : ''};
     };
 
-    room.toggleEdit = function () {
-      var me;
+    room.selectUser = function (user) {
+      if (user.id() === room.selectedUser()) {
+        room.selectedUser(null);
+      } else {
+        room.selectedUser(user.id());
+      }
+    };
+
+    room.toggleEdit = function (target) {
+      if (target && target !== room.myid()) {
+        return;
+      }
       room.editMode(!room.editMode());
       if (!room.editMode()) {
-        me = room.users.get(room.myid());
-        if (room.myName() !== me.name()) {
-          me.name(room.myName());
-          msg.send.status({id: me.id(), name: me.name()});
-        }
+        room.updateName();
+      } else if (target) {
+        target = document.querySelector('.users .is-me input');
+        setTimeout(function () {
+          target.focus();
+        }, 1);
+      }
+    };
+
+    room.blurName = function () {
+      if (isDesktopUi()) {
+        room.editMode(false);
+        room.updateName();
+      }
+    };
+
+    room.updateName = function () {
+      var me = room.users.get(room.myid());
+      if (room.myName() !== me.name()) {
+        me.name(room.myName());
+        msg.send.status({id: me.id(), name: me.name()});
       }
     };
 
