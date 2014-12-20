@@ -19,10 +19,13 @@ define(['mithril', 'mod/room'], function (m, room) {
                 m('div.status-msg', room.joinStatus())
               ]),
               m('section.users', room.users.map(function (user) {
-                return m('div.user.pure-g', {id: user.id(), 'class': (user.observer() ? 'observer' : 'normal')}, [
+                return m('div.user.pure-g', {id: user.id(), 'class': room.userClass(user)}, [
+                  m('div.pure-u-1-8.obs-status', {onclick: room.toggleObs.bind(room, user)}, [
+                    m('i.fa.fa-fw', {'class': (user.observer() ? 'fa-eye' : 'fa-pencil')})
+                  ]),
                   m('div.pure-u-3-4.name', [
-                    m('i.fa.fa-eye'),
-                    m('a[href=""]', {onclick: room.toggleObs.bind(room, user)}, user.name())
+                    m('span.un', [m('i.fa.fa-eye'), user.name()]),
+                    m('input', {onkeyup: room.setName, value: room.myName()})
                   ]),
                   m('div.pure-u-1-4.status', [
                     m('i.fa.fa-check', room.showUserReady(user)),

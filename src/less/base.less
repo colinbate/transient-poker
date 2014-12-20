@@ -32,8 +32,7 @@ a {
 	}
 }
 
-.pure-button {
-	padding: 0.5em 0.25em;
+.button-like() {
 	border: 1px solid @color-button;
 	background-color: #fff;
 	color: @color-button;
@@ -53,6 +52,11 @@ a {
 	&:disabled {
 		border: 1px solid #888;
 	}
+}
+
+.pure-button {
+	padding: 0.5em 0.25em;
+	.button-like();
 }
 
 header {

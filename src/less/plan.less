@@ -6,17 +6,32 @@ section.users {
 
 		&.observer {
 			background-color: #eee;
-			.name {
+			.name .un {
 				font-style: italic;
-				i {
-					padding-right: 0.5em;
-				}
 			}
 		}
-		&.normal {
-			.name i {
-				display: none;
-			}
+
+		.edit-mode & .name {
+			padding-left: 0.5em;
+		}
+
+		.run-mode & .obs-status,
+		&.normal .name .un i,
+		.edit-mode & .name .un i {
+			display: none;
+		}
+
+		.name .un i {
+			padding-right: 0.5em;
+		}
+
+		.edit-mode & .obs-status {
+			border-radius: 2px;
+			padding: 0.5em;
+			display: inline-block;
+			line-height: normal;
+			text-align: center;
+			.button-like();
 		}
 		
 		.status {
@@ -33,10 +48,30 @@ section.users {
 				width: 50%;
 			}
 		}
+		.edit-mode & .status {
+			width: 12.5%;
+		}
 
-		.name, .status {
+		.name .un, .obs-status, .status {
 			line-height: normal;
 			padding: 0.5em 0;
+			display: inline-block;
+			border-top: 1px solid transparent;
+			border-bottom: 1px solid transparent;
+		}
+
+		.run-mode & .name input, .edit-mode &.not-me .name input {
+			display: none;
+		}
+
+		.name input {
+			padding: 0.5em;
+			border: 1px solid #ccc;
+			width: 100%;
+		}
+
+		.edit-mode &.is-me .name .un {
+			display: none;
 		}
 
 		.delete {

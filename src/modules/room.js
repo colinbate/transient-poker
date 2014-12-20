@@ -79,6 +79,12 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id'], functi
       return show ? {} : {style: {display: 'none'}};
     };
 
+    room.userClass = function (user) {
+      var klass = (user.observer() ? 'observer' : 'normal') + ' ' +
+                  (user.id() === room.myid() ? 'is-me' : 'not-me');
+      return klass;
+    };
+
     room.showUserReady = function (usr) {
       var ready = usr.ready(),
           notVoted = !usr.hasVoted(),
@@ -160,7 +166,15 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id'], functi
     };
 
     room.toggleEdit = function () {
+      var me;
       room.editMode(!room.editMode());
+      if (!room.editMode()) {
+        me = room.users.get(room.myid());
+        if (room.myName() !== me.name()) {
+          me.name(room.myName());
+          msg.send.status({id: me.id(), name: me.name()});
+        }
+      }
     };
 
     room.addUser = function (payload) {
