@@ -36,6 +36,7 @@ a {
 	border: 1px solid @color-button;
 	background-color: #fff;
 	color: @color-button;
+	cursor: pointer;
 
 	&:focus, &:hover {
 		-webkit-box-shadow: inset 0px 0px 1px 1px rgba(0,34,238,1);
@@ -80,5 +81,11 @@ header {
 	.title {
 		font-weight: bold;
 		padding: 0.5em 0;
+	}
+
+	@media screen and (min-width: 64em) {
+		.done {
+			display: none;
+		}
 	}
 }

@@ -4,7 +4,7 @@ define(['mithril', 'mod/room'], function (m, room) {
   poker.view = function () {
     return  m('div', room.roomClass(), [
               m('header', room.headerClass(), [
-                m('a[href=""].done', {onclick: room.toggleEdit}, [
+                m('a[href=""].done#modeind', {onclick: room.toggleEdit}, [
                   m('span.manage', 'Manage Users'),
                   m('span.d', 'Done')
                 ]),
@@ -19,22 +19,22 @@ define(['mithril', 'mod/room'], function (m, room) {
                 m('div.status-msg', room.joinStatus())
               ]),
               m('section.users', room.users.map(function (user) {
-                return m('div.user.pure-g', {id: user.id(), 'class': room.userClass(user)}, [
+                return m('div.uwrap', m('div.user.pure-g', {id: user.id(), 'class': room.userClass(user), onclick: room.selectUser.bind(room, user)}, [
                   m('div.pure-u-1-8.obs-status', {onclick: room.toggleObs.bind(room, user)}, [
                     m('i.fa.fa-fw', {'class': (user.observer() ? 'fa-eye' : 'fa-pencil')})
                   ]),
                   m('div.pure-u-3-4.name', [
-                    m('span.un', [m('i.fa.fa-eye'), user.name()]),
-                    m('input', {onkeyup: room.setName, value: room.myName()})
+                    m('span.un', {onclick: room.toggleEdit.bind(room, user.id())}, [m('i.fa.fa-eye'), user.name()]),
+                    m('input', {onkeyup: room.setName, onblur: room.blurName, value: room.myName()})
                   ]),
                   m('div.pure-u-1-4.status', [
                     m('i.fa.fa-check', room.showUserReady(user)),
-                    m('span.choice', room.show(user.hasVoted()), user.vote())
+                    m('span.choice', user.vote())
                   ]),
                   m('div.pure-u-1-4.delete', [
                     m('button.pure-button', {onclick: room.kick.bind(room, user)}, user.id() === room.myid() ? 'Quit' : 'Evict')
                   ])
-                ]);
+                ]));
               })),
               m('section.vote.pure-g', room.voteStyle(), room.cards.map(function (val) {
                 return  m('div.pure-u-1-4.pure-u-md-1-6.pure-u-lg-1-12.btn-wrap', room.picked(val), [
