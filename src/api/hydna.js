@@ -11,14 +11,21 @@ define(['hydna', 'mod/short-id', 'mod/compress-hex'], function (hydna, sid, ch) 
   // });
   var CHANNEL_PREFIX = 'planningpoker.hydna.net/',
       chans = {},
+      opts = {transport: 'auto'},
       init = function (room, cb) {
         if (!chans[room]) {
-          chans[room] = new hydna.Channel(CHANNEL_PREFIX + room, 'rw');
+          chans[room] = new hydna.Channel(CHANNEL_PREFIX + room, 'rw', opts);
           chans[room].onopen = function (ev) {
             chans[room].clientId = ev.data ? ch.shrink(ev.data) : sid.get(22);
             if (cb) {
               cb.call(null, false, chans[room]);
             }
+          };
+          chans[room].onclose = function (ev) {
+            window.console.log('onclose', ev);
+          };
+          chans[room].onerror = function (ev) {
+            window.console.log('onerror', ev);
           };
         } else {
           if (cb) {
