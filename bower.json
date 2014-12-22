@@ -23,6 +23,7 @@
     "tests"
   ],
   "dependencies": {
-    "fastclick": "~1.0.3"
+    "fastclick": "~1.0.3",
+    "qr-js": "~1.1.3"
   }
 }

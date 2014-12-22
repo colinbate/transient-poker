@@ -125,7 +125,8 @@ module.exports = function(grunt) {
     clean: ['build', 'dist/<%= pkg.version %>'],
     bowercopy: {
       files: {
-        'src/lib/fastclick.js': 'fastclick/lib/fastclick.js'
+        'src/lib/fastclick.js': 'fastclick/lib/fastclick.js',
+        'src/lib/qr.js': 'qr-js/qr.js'
       }
     }
   });
