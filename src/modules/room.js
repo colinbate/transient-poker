@@ -304,6 +304,7 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id', 'lib/qr
         room.myid(false);
         room.handleReset();
         room.editMode(false);
+        room.joinStatus('');
         room.users = new user.UserCollection();
         msg.signout();
       } else {
