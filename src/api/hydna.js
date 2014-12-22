@@ -11,10 +11,10 @@ define(['hydna', 'mod/short-id', 'mod/compress-hex'], function (hydna, sid, ch) 
   // });
   var CHANNEL_PREFIX = 'planningpoker.hydna.net/',
       chans = {},
-      opts = {transport: 'auto'},
+      transport = 'auto',
       init = function (room, cb) {
         if (!chans[room]) {
-          chans[room] = new hydna.Channel(CHANNEL_PREFIX + room, 'rw', opts);
+          chans[room] = new hydna.Channel(CHANNEL_PREFIX + room, 'rw', {transport: transport});
           chans[room].onopen = function (ev) {
             chans[room].clientId = ev.data ? ch.shrink(ev.data) : sid.get(22);
             if (cb) {
@@ -23,9 +23,17 @@ define(['hydna', 'mod/short-id', 'mod/compress-hex'], function (hydna, sid, ch) 
           };
           chans[room].onclose = function (ev) {
             window.console.log('onclose', ev);
+            if (ev.hadError) {
+              if (transport === 'flash') {
+                cb.call(null, ev.reason);
+              } else {
+                transport = 'flash';
+                init(room, cb);
+              }
+            }
           };
           chans[room].onerror = function (ev) {
-            window.console.log('onerror', ev);
+            window.console.warn('onerror', ev);
           };
         } else {
           if (cb) {
@@ -46,6 +54,10 @@ define(['hydna', 'mod/short-id', 'mod/compress-hex'], function (hydna, sid, ch) 
           init(room, function (error, chan) {
             if (error) {
               window.console.error(error);
+              if (cb && typeof cb === 'function') {
+                cb.call(null, false, error);
+              }
+              return;
             }
             chan.onmessage = dataHandler;
             chan.onsignal = dataHandler;

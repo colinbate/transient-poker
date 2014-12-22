@@ -1,6 +1,6 @@
 {
   "name": "planning-poker",
-  "version": "0.13.2",
+  "version": "0.13.3",
   "description": "Static planning poker.",
   "main": "src/index.html",
   "repository": {
