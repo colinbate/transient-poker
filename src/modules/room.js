@@ -30,7 +30,7 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id', 'lib/qr
         var str = w.location.hash,
             pos = str.indexOf('/');
         if (pos !== -1) {
-          str = str.substring(pos + 1);
+          str = decodeURIComponent(str.substring(pos + 1));
           return str;
         }
         return '';
@@ -145,6 +145,10 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id', 'lib/qr
         el.focus();
       }
     };
+
+    room.setHash = function () {
+      w.location.hash = room.title() + '/' + encodeURIComponent(room.myName());
+    };
     
     room.join = function (props) {
       var newUser;
@@ -152,6 +156,7 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id', 'lib/qr
       if (room.myName() && !room.joinStatus()) {
         m.startComputation();
         room.joinStatus('Joining...');
+        room.setHash();
         m.redraw();
         msg.signin(room.title(), function (uid) {
           room.myid(uid);
@@ -235,6 +240,7 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id', 'lib/qr
     room.updateName = function () {
       var me = room.users.get(room.myid());
       if (room.myName() !== me.name()) {
+        room.setHash();
         me.name(room.myName());
         msg.send.status({id: me.id(), name: me.name()});
       }
