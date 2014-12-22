@@ -22,22 +22,18 @@ define(['hydna', 'mod/short-id', 'mod/compress-hex'], function (hydna, sid, ch) 
             }
           };
           chans[room].onclose = function (ev) {
-            window.console.log('onclose', ev);
             if (ev.hadError) {
-              window.console.log('closed with error');
               if (transport === 'comet') {
-                window.console.log('last try');
                 cb.call(null, ev.reason);
               } else {
                 transport = 'comet';
-                window.console.log('try again');
                 delete chans[room];
                 init(room, cb);
               }
             }
           };
           chans[room].onerror = function (ev) {
-            window.console.warn('onerror', ev);
+            window.console.error('onerror', ev);
           };
         } else {
           if (cb) {
