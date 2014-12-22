@@ -216,7 +216,7 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id', 'lib/qr
     };
 
     room.toggleEdit = function (target) {
-      if (target && target !== room.myid()) {
+      if (target && typeof(target) === 'string' && target !== room.myid()) {
         return;
       }
       room.editMode(!room.editMode());
