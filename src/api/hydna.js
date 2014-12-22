@@ -24,10 +24,14 @@ define(['hydna', 'mod/short-id', 'mod/compress-hex'], function (hydna, sid, ch) 
           chans[room].onclose = function (ev) {
             window.console.log('onclose', ev);
             if (ev.hadError) {
-              if (transport === 'flash') {
+              window.console.log('closed with error');
+              if (transport === 'comet') {
+                window.console.log('last try');
                 cb.call(null, ev.reason);
               } else {
-                transport = 'flash';
+                transport = 'comet';
+                window.console.log('try again');
+                delete chans[room];
                 init(room, cb);
               }
             }

@@ -168,7 +168,7 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id', 'lib/qr
             msg.send.join(newUser.toJson());
             room.joinStatus('');
           } else {
-            room.joinStatus(err);
+            room.joinStatus(err || 'Could not connect');
           }
           m.endComputation();
         });
