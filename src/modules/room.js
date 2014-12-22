@@ -1,4 +1,4 @@
-define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id'], function (m, user, msg, w, sid) {
+define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id', 'lib/qr'], function (m, user, msg, w, sid, qr) {
   'use strict';
   var room = {},
       handlerFactory = function (fn) {
@@ -50,9 +50,36 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id'], functi
     room.editMode = m.prop(false);
     room.joinStatus = m.prop('');
     room.selectedUser = m.prop(null);
+    room.qr = m.prop(false);
+    room.renderQr = m.prop(false);
+    room.url = m.prop('');
 
     room.roomClass = function () {
-      return {'class': room.editMode() ? 'edit-mode' : 'run-mode'};
+      var klass = (room.editMode() ? 'edit-mode' : 'run-mode') + ' ' +
+                  (room.qr() ? 'show-qr' : 'no-qr');
+      return {'class': klass};
+    };
+
+    room.showQr = function () {
+      var qrimg,
+          dest,
+          url = w.location.origin + w.location.pathname + '#' + room.title();
+      if (!room.renderQr()) {
+        room.renderQr(true);
+        room.url(url);
+        qrimg = qr.image({
+          size: 10,
+          value: url
+        });
+        dest = document.querySelector('section.overlay .qr-here');
+        dest.innerHTML = '';
+        dest.appendChild(qrimg);
+      }
+      room.qr(true);
+    };
+
+    room.hideQr = function () {
+      room.qr(false);
     };
 
     room.headerClass = function () {

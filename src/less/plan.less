@@ -198,3 +198,43 @@ section.commands {
 		margin-top: 1em;
 	}
 }
+
+section.overlay {
+	.no-qr & {
+		display: none;
+	}
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.75);
+	z-index: 100;
+	text-align: center;
+
+	.modal {
+		text-align: center;
+		padding: 1em;
+		img {
+			max-width: 100%;
+		}
+		z-index: 110;
+		background-color: #fff;
+
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	@media screen and (min-width: 64em) {
+		.modal {
+			margin: 2em;
+			position: relative;
+			display: inline-block;
+			width: 50%;
+			height: auto;
+		}
+	}
+}

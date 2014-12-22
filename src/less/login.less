@@ -9,6 +9,25 @@ section.entry {
 		border: 1px solid #ccc;
 		padding: 0.5em;
 	}
+	p.info {
+		max-width: 35em;
+		margin: 0 auto;
+		text-align: left;
+		margin-bottom: 1em;
+	}
+
+	p.info.large {
+		display: none;
+	}
+
+	@media screen and (min-width: 64em) {
+		p.info.small {
+			display: none;
+		}
+		p.info.large {
+			display: block;
+		}
+	}
 	button {
 		padding: 0.5em 1em;
 		margin: 0.5em;
