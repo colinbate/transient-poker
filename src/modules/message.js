@@ -71,7 +71,13 @@ define(['api/hydna', 'mod/event'], function (api, ev) {
             }
           };
       channel = room;
-      api.subscribe(room, incomingHandler, function (uid) {
+      api.subscribe(room, incomingHandler, function (uid, err) {
+        if (err) {
+          if (cb && typeof cb === 'function') {
+            cb.call(null, false, err);
+          }
+          return;
+        }
         myid = uid;
         if (cb && typeof cb === 'function') {
           cb.call(null, myid);

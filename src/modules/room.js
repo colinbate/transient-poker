@@ -158,14 +158,18 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id', 'lib/qr
         room.joinStatus('Joining...');
         room.setHash();
         m.redraw();
-        msg.signin(room.title(), function (uid) {
-          room.myid(uid);
-          props.id = room.myid();
-          props.name = room.myName();
-          newUser = new user.User(props);
-          room.users.add(newUser);
-          msg.send.join(newUser.toJson());
-          room.joinStatus('');
+        msg.signin(room.title(), function (uid, err) {
+          if (uid) {
+            room.myid(uid);
+            props.id = room.myid();
+            props.name = room.myName();
+            newUser = new user.User(props);
+            room.users.add(newUser);
+            msg.send.join(newUser.toJson());
+            room.joinStatus('');
+          } else {
+            room.joinStatus(err);
+          }
           m.endComputation();
         });
       }
