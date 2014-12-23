@@ -1,4 +1,4 @@
-define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id', 'lib/qr'], function (m, user, msg, w, sid, qr) {
+define(['mithril', 'mod/user', 'mod/message', 'mod/entry', 'lib/qr'], function (m, user, msg, entry, qr) {
   'use strict';
   var room = {},
       handlerFactory = function (fn) {
@@ -10,38 +10,13 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id', 'lib/qr
           }
         };
       },
-      getRoom = function () {
-        var str = w.location.hash,
-            pos = str.indexOf('/');
-        if (str.substring(0, 1) === '#') {
-          str = str.substring(1);
-        }
-        if (pos !== -1) {
-          str = str.substring(0, pos);
-        }
-        str = str.replace(/[^a-zA-Z0-9_-]/g, '');
-        if (!str) {
-          str = sid.get(5);
-          w.location.hash = str;
-        }
-        return str;
-      },
-      getHashName = function () {
-        var str = w.location.hash,
-            pos = str.indexOf('/');
-        if (pos !== -1) {
-          str = decodeURIComponent(str.substring(pos + 1));
-          return str;
-        }
-        return '';
-      },
       isDesktopUi = function () {
         var modeind = document.getElementById('modeind');
         return modeind.offsetWidth === 0;
       };
   room.init = function () {
-    room.myName = m.prop(getHashName());
-    room.title = m.prop(getRoom());
+    room.myName = m.prop(entry.name());
+    room.title = m.prop(entry.room());
     room.cards = [0, '½', 1, 2, 3, 5, 8, 13, 20, 40, 100, '?'];
     room.users = new user.UserCollection();
     room.myid = m.prop(false);
@@ -63,7 +38,7 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id', 'lib/qr
     room.showQr = function () {
       var qrimg,
           dest,
-          url = w.location.origin + w.location.pathname + '#' + room.title();
+          url = entry.url();
       if (!room.renderQr()) {
         room.renderQr(true);
         room.url(url);
@@ -145,10 +120,6 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id', 'lib/qr
         el.focus();
       }
     };
-
-    room.setHash = function () {
-      w.location.hash = room.title() + '/' + encodeURIComponent(room.myName());
-    };
     
     room.join = function (props) {
       var newUser;
@@ -156,7 +127,7 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id', 'lib/qr
       if (room.myName() && !room.joinStatus()) {
         m.startComputation();
         room.joinStatus('Joining...');
-        room.setHash();
+        entry.name(room.myName());
         m.redraw();
         msg.signin(room.title(), function (uid, err) {
           if (uid) {
@@ -244,7 +215,7 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id', 'lib/qr
     room.updateName = function () {
       var me = room.users.get(room.myid());
       if (room.myName() !== me.name()) {
-        room.setHash();
+        entry.name(room.myName());
         me.name(room.myName());
         msg.send.status({id: me.id(), name: me.name()});
       }
@@ -313,27 +284,18 @@ define(['mithril', 'mod/user', 'mod/message', '$window', 'mod/short-id', 'lib/qr
       }
     };
 
-    w.onbeforeunload = function () {
-      if (room.myid()) {
-        msg.send.leaveSync();
+    entry.onroomchange(function (title) {
+      m.startComputation();
+      if (!room.myid()) {
+        room.title(title);
+      } else if (room.title() !== title) {
+        // Leave room
+        msg.send.leave();
+        room.handleKick({target: room.myid()});
+        room.title(title);
       }
-    };
-
-    if ('onhashchange' in w) {
-      w.onhashchange = function () {
-        var title = getRoom();
-        m.startComputation();
-        if (!room.myid()) {
-          room.title(title);
-        } else if (room.title() !== title) {
-          // Leave room
-          msg.send.leave();
-          room.handleKick({target: room.myid()});
-          room.title(title);
-        }
-        m.endComputation();
-      };
-    }
+      m.endComputation();
+    });
 
     msg.on.join(handlerFactory(room.addUser));
     msg.on.join(handlerFactory(room.hailOthers));
