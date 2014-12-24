@@ -1,4 +1,4 @@
-define(['mithril', 'mod/user', 'mod/message', 'mod/entry', 'lib/qr', 'mod/helpers'], function (m, user, msg, entry, qr, h) {
+define(['mithril', 'mod/user', 'mod/message', 'mod/entry', 'lib/qr', 'mod/helpers', 'mod/tally'], function (m, user, msg, entry, qr, h, t) {
   'use strict';
   var room = {},
       handlerFactory = function (fn) {
@@ -25,6 +25,7 @@ define(['mithril', 'mod/user', 'mod/message', 'mod/entry', 'lib/qr', 'mod/helper
     room.myid = m.prop(false);
     room.myChoice = m.prop(null);
     room.voted = m.prop(false);
+    room.tally = new t.Tally();
     room.editMode = m.prop(false);
     room.joinStatus = m.prop('');
     room.selectedUser = m.prop(null);
@@ -94,10 +95,15 @@ define(['mithril', 'mod/user', 'mod/message', 'mod/entry', 'lib/qr', 'mod/helper
       return usr.id() === room.selectedUser();
     };
 
+    room.userVoteClass = function (usr) {
+      return room.tally.getClass(usr.vote());
+    };
+
     room.userClass = h.classy(h.invoke('observer'), 'observer', 'normal').
                       and(h.invoke('ready'), 'is-ready', 'not-ready').
                       and(room.isMe, 'is-me', 'not-me').
                       and(room.isUserSelected, 'selected', '').
+                      and(room.userVoteClass).
                       bare;
 
     room.focusMe = function (el, init) {
@@ -175,6 +181,7 @@ define(['mithril', 'mod/user', 'mod/message', 'mod/entry', 'lib/qr', 'mod/helper
           if (room.users.everyoneReady()) {
             msg.send.vote({choice: choice});
             room.voted(true);
+            room.tally.add(choice);
           }
         } else {
           room.myChoice(choice);
@@ -264,6 +271,7 @@ define(['mithril', 'mod/user', 'mod/message', 'mod/entry', 'lib/qr', 'mod/helper
         if (room.users.everyoneReady()) {
           msg.send.vote({choice: room.myChoice()});
           room.voted(true);
+          room.tally.add(room.myChoice());
         }
       }
     };
@@ -271,6 +279,7 @@ define(['mithril', 'mod/user', 'mod/message', 'mod/entry', 'lib/qr', 'mod/helper
     room.handleVote = function (payload) {
       if (room.users.get(payload.$sender)) {
         room.users.get(payload.$sender).vote(payload.choice);
+        room.tally.add(payload.choice);
       }
     };
 
@@ -285,6 +294,7 @@ define(['mithril', 'mod/user', 'mod/message', 'mod/entry', 'lib/qr', 'mod/helper
       room.users.reset();
       room.myChoice(null);
       room.voted(false);
+      room.tally.clear();
     };
 
     room.handleLeave = function (payload) {
