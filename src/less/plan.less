@@ -21,6 +21,11 @@ section.users {
 			display: none;
 		}
 
+		.have-voted & .ready-indicator,
+		&.not-ready .ready-indicator {
+			display: none;
+		}
+
 		.name .un i {
 			padding-right: 0.5em;
 		}
@@ -189,6 +194,9 @@ section.vote {
 		width: 100%;
 		font-size: 2em;
 	}
+	.in-lobby &, .have-voted & {
+		display: none;
+	}
 }
 
 section.commands {
@@ -196,6 +204,9 @@ section.commands {
 	button {
 		padding: 0.75em 1.5em;
 		margin-top: 1em;
+	}
+	.not-voted & {
+		display: none;
 	}
 }
 
