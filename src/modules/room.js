@@ -96,7 +96,7 @@ define(['mithril', 'mod/user', 'mod/message', 'mod/entry', 'lib/qr', 'mod/helper
     };
 
     room.userVoteClass = function (usr) {
-      return room.tally.getClass(usr.vote());
+      return room.users.everyoneVoted() ? room.tally.getClass(usr.vote()) : '';
     };
 
     room.userClass = h.classy(h.invoke('observer'), 'observer', 'normal').

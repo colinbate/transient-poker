@@ -89,6 +89,17 @@ define(['mithril'], function (m) {
     }
     return true;
   };
+  user.UserCollection.prototype.everyoneVoted = function () {
+    var u;
+    for (u in this._users) {
+      if (hop.call(this._users, u)) {
+        if (this._users[u].vote() === null && !this._users[u].observer()) {
+          return false;
+        }
+      }
+    }
+    return true;
+  };
   user.UserCollection.prototype.toArray = function () {
     var u, order = [];
     for (u in this._users) {
