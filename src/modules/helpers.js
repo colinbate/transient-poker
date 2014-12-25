@@ -29,7 +29,6 @@ define([], function () {
         toAdd = toAdd ? pos : neg;
       }
       klass = appendClass(klass, toAdd);
-      window.console.log('classy', args.length ? args[0] : 'no args', 'klass', klass);
       props['class'] = klass;
       return props;
     };
