@@ -12,6 +12,8 @@ define([], function () {
     if (this.votes[vote] > this.most.count) {
       this.most.count = this.votes[vote];
       this.most.value = vote;
+    } else if (this.votes[vote] === this.most.count) {
+      this.most.value = null;
     }
   };
 
