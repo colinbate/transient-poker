@@ -1,4 +1,4 @@
-define(['mithril', 'mod/user', 'mod/message', 'mod/entry', 'lib/qr', 'mod/helpers', 'mod/tally'], function (m, user, msg, entry, qr, h, t) {
+define(['mithril', 'mod/user', 'mod/message', 'mod/entry', 'qrious', 'mod/helpers', 'mod/tally'], function (m, user, msg, entry, Qrious, h, t) {
   'use strict';
   var room = {},
       handlerFactory = function (fn) {
@@ -51,13 +51,13 @@ define(['mithril', 'mod/user', 'mod/message', 'mod/entry', 'lib/qr', 'mod/helper
       if (!room.renderQr()) {
         room.renderQr(true);
         room.url(url);
-        qrimg = qr.image({
-          size: 10,
+        qrimg = new Qrious({
+          size: 200,
           value: url
         });
         dest = document.querySelector('section.overlay .qr-here');
         dest.innerHTML = '';
-        dest.appendChild(qrimg);
+        dest.appendChild(qrimg.image);
       }
       room.qr(true);
     };
