@@ -1,6 +1,6 @@
 {
   "name": "planning-poker",
-  "version": "0.21.0",
+  "version": "0.22.0",
   "description": "Static planning poker.",
   "main": "src/index.html",
   "repository": {
@@ -15,6 +15,7 @@
     "poker"
   ],
   "now": {
+    "name": "planning-poker",
     "alias": "pp.cbate.com"
   },
   "author": "Colin Bate <colin@colinbate.com>",

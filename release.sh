@@ -2,7 +2,7 @@
 bump=${1:-minor}
 if [ "$bump" = "current" ]; then
   echo Releasing current version of Planning Poker
-  version=$(node -e "console.log(require('./package.json').version)")
+  version=$(node -e "console.log('v' + require('./package.json').version)")
   echo Version is $version
 else
   echo Releasing new $bump version of Planning Poker

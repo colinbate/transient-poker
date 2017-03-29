@@ -1,4 +1,4 @@
-define(['api/hydna', 'mod/event'], function (api, ev) {
+define(['api/drone', 'mod/event'], function (api, ev) {
   'use strict';
   var sender, myid, channel;
   
