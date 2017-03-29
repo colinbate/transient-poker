@@ -7,7 +7,9 @@
             //'pubnub'     : '//cdn.pubnub.com/pubnub-3.7.1.min',
             'mithril'    : '//cdnjs.cloudflare.com/ajax/libs/mithril/0.1.26/mithril',
             //'scaledrone' : 'https://api2.scaledrone.com/assets/scaledrone.min',
-            'hydna'      : '//cdn.hydna.com/1/hydna'
+            'hydna'      : '//cdn.hydna.com/1/hydna',
+            'qrious'     : 'https://cdn.rawgit.com/neocotic/qrious/2.2.0/dist/umd/qrious.min',
+            'fastclick'  : '//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min'
         },
         shim: {
             //'pubnub'     : { exports: 'PUBNUB' },
@@ -26,7 +28,7 @@
         return window;
     });
 
-    require(['app', 'lib/fastclick'], function (app, fastclick) {
+    require(['app', 'fastclick'], function (app, fastclick) {
         app.initialize();
         fastclick.attach(document.body);
     });

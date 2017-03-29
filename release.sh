@@ -1,9 +1,17 @@
 #!/bin/bash
 bump=${1:-minor}
-echo Releasing new $bump version of Planning Poker
-version=$(npm version $bump)
+if [ "$bump" = "current" ]; then
+  echo Releasing current version of Planning Poker
+  version=$(node -e "console.log(require('./package.json').version)")
+  echo Version is $version
+else
+  echo Releasing new $bump version of Planning Poker
+  version=$(npm version $bump)
+  echo New version is $version
+fi
+
 grunt pack
-echo New version is $version
+
 hg ci -m "Release $version"
 hg tag $version -m "Tag for release $version"
-rsync -r ./dist/${version#?}/ root@wallboardr.io:/var/apps/pp.cbate.com/
+now ./dist/${version#?}/
