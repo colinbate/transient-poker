@@ -1,4 +1,4 @@
-define(['scaledrone'], function (ScaleDrone) {
+define(['scaledrone'], function () {
   'use strict';
   var CHANNEL_ID = 'l4AaLoPXD24J0tb5',
       // REST_PREFIX = 'https://api2.scaledrone.com/',
@@ -9,7 +9,7 @@ define(['scaledrone'], function (ScaleDrone) {
       subs = {},
       init = function (cb) {
         if (!drone) {
-          drone = new ScaleDrone(CHANNEL_ID);
+          drone = new window.ScaleDrone(CHANNEL_ID);
           drone.on('open', cb);
         } else {
           if (cb) {
