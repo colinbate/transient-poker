@@ -5,5 +5,5 @@ Play a game of planning poker. A simple peer-to-peer message-based implementatio
 ## Uses
 
 * Mithril MVC Framework
-* PubNub
+* Scaledrone
 * Pure CSS

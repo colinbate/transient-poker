@@ -7,7 +7,7 @@ module.exports = function(grunt) {
       banner:
         '/*!\n' +
         ' * Planning Poker <%= pkg.version %> (<%= grunt.template.today("yyyy-mm-dd, HH:MM") %>)\n' +
-        ' * http://bitbucket.org/colinbate/transient-poker\n' +
+        ' * https://github.com/colinbate/transient-poker\n' +
         ' * MIT licensed\n' +
         ' *\n' +
         ' * Copyright (C) <%= grunt.template.today("yyyy") %> Colin Bate, http://colinbate.com\n' +
@@ -59,7 +59,7 @@ module.exports = function(grunt) {
     replace: {
       version: {
         src: ['src/index.html'],
-        dest: 'dist/<%= pkg.version %>/index.html',             // destination directory or file
+        dest: 'dist/index.html',             // destination directory or file
         replacements: [{
           from: /v\d+\.\d+\.\d+(-[a-z0-9]+)?/,                   // string replacement
           to: 'v<%= pkg.version %>'
@@ -107,7 +107,7 @@ module.exports = function(grunt) {
           preserveComments: false
         },
         files: {
-          'dist/<%= pkg.version %>/main.<%= pkg.version %>.js': ['build/main.js']
+          'dist/main.<%= pkg.version %>.js': ['build/main.js']
         }
       },
     },
@@ -118,22 +118,30 @@ module.exports = function(grunt) {
       },
       core: {
         files: {
-          'dist/<%= pkg.version %>/poker.<%= pkg.version %>.css': ['src/poker.css']
+          'dist/poker.<%= pkg.version %>.css': ['src/poker.css']
         }
       }
     },
-    clean: ['build', 'dist/<%= pkg.version %>']
+    copy: {
+      favicon: {
+        files: [
+          {expand: true, cwd: 'src', src: ['favicon.png'], dest: 'dist/'}
+        ]
+      }
+    },
+    clean: ['build', 'dist']
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-text-replace');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-csso');
 
   grunt.registerTask('default', ['jshint', 'less:dev']);
-  grunt.registerTask('pack', ['jshint', 'less:clean', 'clean', 'csso', 'requirejs', 'uglify', 'replace']);
+  grunt.registerTask('pack', ['jshint', 'less:clean', 'clean', 'csso', 'requirejs', 'uglify', 'replace', 'copy']);
 };

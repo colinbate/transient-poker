@@ -1,11 +1,11 @@
 {
   "name": "planning-poker",
-  "version": "0.22.0",
+  "version": "0.23.0",
   "description": "Static planning poker.",
   "main": "src/index.html",
   "repository": {
-    "type": "mercurial",
-    "url": "https://bitbucket.org/colinbate/transient-poker"
+    "type": "git",
+    "url": "https://github.com/colinbate/transient-poker"
   },
   "scripts": {
     "build": "grunt pack"
@@ -14,16 +14,13 @@
     "planning",
     "poker"
   ],
-  "now": {
-    "name": "planning-poker",
-    "alias": "pp.cbate.com"
-  },
   "author": "Colin Bate <colin@colinbate.com>",
   "license": "MIT",
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-jshint": "^1.1.0",
     "grunt-contrib-less": "^1.4.1",
     "grunt-contrib-requirejs": "^1.0.0",
