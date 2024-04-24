@@ -30,6 +30,9 @@ define([], function () {
     if (vote === '?') {
       return 'vote-pass';
     }
+    if (vote === '+') {
+      return 'vote-toobig';
+    }
     if (vote === this.most.value) {
       return 'vote-most';
     }

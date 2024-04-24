@@ -1,5 +1,5 @@
 @color-divider: #888;
-@color-button: #02e;
+@color-button: #ff3e00;
 
 body {
 	line-height: 1.5;
@@ -12,8 +12,8 @@ body {
 	-moz-box-sizing: border-box;
 }
 
-body, .pure-g, .pure-g [class*="pure-u"] {
-	font-family: "Helvetica Neue", Arial, sans-serif;
+body, .pure-g, .pure-g [class*="pure-u"], input, button, textarea, select {
+	font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace; 
 }
 
 a {
@@ -61,8 +61,9 @@ a {
 }
 
 header {
-	background-color: #eaeaea;
-	border-bottom: 1px solid @color-divider;
+	color: #fff;
+	background-image: linear-gradient(20deg, #0f172a 0, #3b0764 100%);
+	box-shadow: rgba(45, 35, 66, .4) 0 2px 4px,rgba(45, 35, 66, .3) 0 7px 13px -3px,rgba(58, 65, 111, .5) 0 -3px 0 inset;
 	padding: 0.5em 1em;
 	.in-lobby & {
 		a {
@@ -81,10 +82,20 @@ header {
 	.title {
 		font-weight: bold;
 		padding: 0.5em 0;
+		font-size: 1.5rem;
+		display: flex;
+		gap: 1rem;
+		align-items: center;
+	}
+	.logo {
+		height: 3rem;
+		position: relative;
+		top: -0.2rem;
 	}
 	.room-name {
 		color: @color-button;
 		cursor: pointer;
+		font-size: 1rem;
 	}
 
 	@media screen and (min-width: 64em) {

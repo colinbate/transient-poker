@@ -9,7 +9,8 @@ define(['mithril', 'mod/room'], function (m, room) {
                   m('span.d', 'Done')
                 ]),
                 m('div.title', [
-                  'Planning Poker',
+                  m('img.logo', { src: '/favicon.png', alt: 'Icon of cards' }),
+                  m('span', 'Planning Poker'),
                   m('span.room-name', {onclick: room.showQr}, [
                     ' (' + room.title() + ')'
                   ])
@@ -18,8 +19,8 @@ define(['mithril', 'mod/room'], function (m, room) {
               m('section.entry', [
                 m('input[placeholder="Enter a name..."]', {onkeyup: room.setName, value: room.myName(), config: room.focusMe}),
                 m('div', [
-                  m('button.pure-button', {disabled: room.noEntry(), onclick: room.join()}, 'Participate'),
-                  m('button.pure-button', {disabled: room.noEntry(), onclick: room.join({observer: true})}, 'Observe')
+                  m('button.button-30', {disabled: room.noEntry(), onclick: room.join()}, 'Participate'),
+                  m('button.button-30', {disabled: room.noEntry(), onclick: room.join({observer: true})}, 'Observe')
                 ]),
                 m('div.status-msg', room.joinStatus()),
                 m('p.info', 'Welcome to Planning Poker. If you are not familiar with it, the idea is quite simple. A group of people vote on the estimated amount of effort to complete a piece of defined work, usually on a software project.'),
@@ -32,7 +33,7 @@ define(['mithril', 'mod/room'], function (m, room) {
               ]),
               m('section.users', room.users.map(function (user) {
                 return m('div.uwrap', m('div.user.pure-g', {id: user.id(), 'class': room.userClass(user), onclick: room.toggleSelectedUser(user)}, [
-                  m('div.pure-u-1-8.obs-status', {onclick: room.toggleObs(user)}, [
+                  m('div.pure-u-1-8.obs-status', {onclick: room.toggleObs(user), title: (user.observer() ? 'Start participating' : 'Switch to observing')}, [
                     m('i.fa.fa-fw', {'class': (user.observer() ? 'fa-eye' : 'fa-pencil')})
                   ]),
                   m('div.pure-u-3-4.name', [
@@ -48,14 +49,14 @@ define(['mithril', 'mod/room'], function (m, room) {
                   ])
                 ]));
               })),
-              m('section.vote.pure-g', room.cards.map(function (val) {
-                return  m('div.pure-u-1-4.pure-u-md-1-6.pure-u-lg-1-12.btn-wrap', room.picked(val), [
-                          m('button.pure-button', {onclick: room.vote(val)}, '' + val)
+              m('section.vote.pure-g.vote-flex', room.cards.map(function (val) {
+                return  m('div', room.picked(val), [
+                          m('button.fun-button', {onclick: room.vote(val)}, '' + val)
                         ]);
               })),
               m('section.commands', [
                 m('div', [
-                  m('button.pure-button', {onclick: room.reset}, 'Clear')
+                  m('button.button-30', {onclick: room.reset}, 'Clear')
                 ])
               ]),
               m('section.overlay', {onclick: room.hideQr}, [

@@ -20,7 +20,8 @@ define(['mithril', 'mod/user', 'mod/message', 'mod/entry', 'qrious', 'mod/helper
 
     room.myName = m.prop(entry.name());
     room.title = m.prop(entry.room());
-    room.cards = [0, '½', 1, 2, 3, 5, 8, 13, 20, 40, 100, '?'];
+    //room.cards = [0, '½', 1, 2, 3, 5, 8, 13, 20, 40, 100, '?'];
+    room.cards = [0, 1, 2, 3, 5, 8, 13, 21, 34, '+', '?'];
     room.users = new user.UserCollection();
     room.myid = m.prop(false);
     room.myChoice = m.prop(null);
