@@ -49,10 +49,11 @@ define(['mithril', 'mod/room'], function (m, room) {
                   ])
                 ]));
               })),
-              m('section.vote.pure-g.vote-flex', room.cards.map(function (val) {
+              m('section.vote.pure-g.vote-flex', room.cards.map(function (val, cidx) {
                 return  m('div', room.picked(val), [
-                          m('button.fun-button', {onclick: room.vote(val)}, '' + val)
-                        ]);
+                  m('button.fun-button', {onclick: room.vote(val)}, '' + val),
+                  m('div.shortcut', 'Ctrl-' + (val === '?' ? '?' : cidx))
+                ]);
               })),
               m('section.commands', [
                 m('div', [

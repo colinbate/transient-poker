@@ -1,4 +1,4 @@
-define(['mithril', 'mod/user', 'mod/message', 'mod/entry', 'qrious', 'mod/helpers', 'mod/tally'], function (m, user, msg, entry, Qrious, h, t) {
+define(['mithril', 'mod/user', 'mod/message', 'mod/entry', 'qrious', 'mod/helpers', 'mod/tally', '$window'], function (m, user, msg, entry, Qrious, h, t, win) {
   'use strict';
   var room = {},
       handlerFactory = function (fn) {
@@ -28,6 +28,7 @@ define(['mithril', 'mod/user', 'mod/message', 'mod/entry', 'qrious', 'mod/helper
     room.voted = m.prop(false);
     room.tally = new t.Tally();
     room.editMode = m.prop(false);
+    room.showShortcuts = m.prop(false);
     room.joinStatus = m.prop('');
     room.selectedUser = m.prop(null);
     room.qr = m.prop(false);
@@ -39,7 +40,8 @@ define(['mithril', 'mod/user', 'mod/message', 'mod/entry', 'qrious', 'mod/helper
     room.roomClass = h.classy(room.editMode, 'edit-mode', 'run-mode').
                       and(room.qr, 'show-qr', 'no-qr').
                       and(room.myid, 'in-room', 'in-lobby').
-                      and(room.voted, 'have-voted', 'not-voted');
+                      and(room.voted, 'have-voted', 'not-voted').
+                      and(room.showShortcuts, 'show-shortcuts', 'hide-shortcuts');
 
     room.picked = h.classy(function (val) {
       return val === room.myChoice();
@@ -140,6 +142,36 @@ define(['mithril', 'mod/user', 'mod/message', 'mod/entry', 'qrious', 'mod/helper
           });
         }
       };
+    };
+
+    /**
+     * 
+     * @param {KeyboardEvent} ev 
+     */
+    room.handleKeyDown = function (ev) {
+      if (ev.which === 17) {
+        room.showShortcuts(true);
+      }
+      if (ev.which >= 48 && ev.which <= 57 && ev.ctrlKey) {
+        ev.preventDefault();
+      }
+    };
+
+    /**
+     * 
+     * @param {KeyboardEvent} ev 
+     */
+    room.handleKeyUp = function (ev) {
+      if (ev.which === 17) {
+        room.showShortcuts(false);
+      }
+      if (((ev.which >= 48 && ev.which <= 57) || ev.which === 191) && ev.ctrlKey) {
+        ev.preventDefault();
+        var sel = ev.which === 191 ? 58 : ev.which;
+        if (room.myid()) {
+          room.vote(room.cards[sel - 48])();
+        }
+      }
     };
 
     room.toggleObs = function (user) {
@@ -329,6 +361,8 @@ define(['mithril', 'mod/user', 'mod/message', 'mod/entry', 'qrious', 'mod/helper
     msg.on.reset(handlerFactory(room.handleReset));
     msg.on.leave(handlerFactory(room.handleLeave));
     msg.on.kick(handlerFactory(room.handleKick));
+    win.addEventListener('keydown', handlerFactory(room.handleKeyDown));
+    win.addEventListener('keyup', handlerFactory(room.handleKeyUp));
   };
   return room;
 });

@@ -302,7 +302,19 @@ section.vote {
 	.in-lobby &, .have-voted & {
 		display: none;
 	}
+	.shortcut {
+		letter-spacing: normal;
+		text-align: center;
+		color: #888;
+		padding: 0.25rem;
+		visibility: hidden;
+	}
+	.show-shortcuts & .shortcut {
+		visibility: visible;
+	}
 }
+
+
 
 .vote-flex {
 	display: flex;
