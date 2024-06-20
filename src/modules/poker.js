@@ -4,10 +4,6 @@ define(['mithril', 'mod/room'], function (m, room) {
   poker.view = function () {
     return  m('div', room.roomClass(), [
               m('header', [
-                m('a[href=""].done#modeind', {onclick: room.toggleEdit()}, [
-                  m('span.manage', 'Manage Users'),
-                  m('span.d', 'Done')
-                ]),
                 m('div.title', [
                   m('img.logo', { src: '/favicon.png', alt: 'Icon of cards' }),
                   m('span', 'Planning Poker'),
@@ -15,6 +11,15 @@ define(['mithril', 'mod/room'], function (m, room) {
                     ' (' + room.title() + ')'
                   ])
                 ]),
+                m('a[href=""].done#modeind', {onclick: room.toggleEdit()}, [
+                  m('span.manage', 'Manage Users'),
+                  m('span.d', 'Done')
+                ]),
+                m('div.coffee', [
+                  m('a[href="https://www.buymeacoffee.com/colinbate"]', {target: '_blank'}, [
+                    m('img', {src: 'https://cdn.buymeacoffee.com/buttons/v2/default-violet.png', alt: 'Buy Me A Coffee', style: 'height: 60px !important;width: 217px !important;'})
+                  ])
+                ])
               ]),
               m('section.entry', [
                 m('input[placeholder="Enter a name..."]', {onkeyup: room.setName, value: room.myName(), config: room.focusMe}),

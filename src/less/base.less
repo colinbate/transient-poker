@@ -61,12 +61,15 @@ a {
 }
 
 header {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
 	color: #fff;
 	background-image: linear-gradient(20deg, #0f172a 0, #3b0764 100%);
 	box-shadow: rgba(45, 35, 66, .4) 0 2px 4px,rgba(45, 35, 66, .3) 0 7px 13px -3px,rgba(58, 65, 111, .5) 0 -3px 0 inset;
 	padding: 0.5em 1em;
 	.in-lobby & {
-		a {
+		a.done {
 			display: none;
 		}
 	}
@@ -79,6 +82,9 @@ header {
 			display: none;
 		}
 	}
+	.coffee {
+		display: none;
+	}
 	.title {
 		font-weight: bold;
 		padding: 0.5em 0;
@@ -86,6 +92,7 @@ header {
 		display: flex;
 		gap: 1rem;
 		align-items: center;
+		flex-grow: 1;
 	}
 	.logo {
 		height: 3rem;
@@ -101,6 +108,10 @@ header {
 	@media screen and (min-width: 64em) {
 		.done {
 			display: none;
+		}
+		.coffee {
+			display: block;
+
 		}
 	}
 }

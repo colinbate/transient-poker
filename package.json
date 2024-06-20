@@ -1,6 +1,6 @@
 {
   "name": "planning-poker",
-  "version": "0.25.0",
+  "version": "0.25.1",
   "description": "Static planning poker.",
   "main": "src/index.html",
   "repository": {
@@ -8,7 +8,8 @@
     "url": "https://github.com/colinbate/transient-poker"
   },
   "scripts": {
-    "build": "grunt pack"
+    "build": "grunt pack",
+    "dev": "sirv --dev -p 8080 dist"
   },
   "keywords": [
     "planning",
